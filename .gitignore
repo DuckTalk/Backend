@@ -4,3 +4,4 @@
 *\cache
 *.pyc
 *.db
+config.json
