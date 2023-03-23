@@ -1,3 +1,4 @@
 flask
 requests
 coloredlogs
+sqlalchemy
