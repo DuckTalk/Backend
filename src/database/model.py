@@ -15,7 +15,10 @@ class User(Base):
     __tablename__ = "user"
     user_id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True)
     username = sqlalchemy.Column(sqlalchemy.String, nullable=False)
+    email = sqlalchemy.Column(sqlalchemy.String, nullable=False, unique=True)
     publickey = sqlalchemy.Column(sqlalchemy.String, nullable=False)
+    salt = sqlalchemy.Column(sqlalchemy.String, nullable=True)
+    hashed_pw = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     groupusers = relationship("GroupUser", cascade="all,delete", uselist=True, backref="user")
     privatemessages = relationship("PrivateMessage", cascade="all,delete", uselist=True, backref="user")
 

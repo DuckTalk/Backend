@@ -4,6 +4,7 @@ import os
 
 from flask import Flask
 
+from database.db_manager import DBManager
 from custom_logger import CustomLogger
 logger = CustomLogger().setup()
 
@@ -42,6 +43,7 @@ def setup():
 
     logger.info("Loading endpoints")
     from endpoints import salt, token, message, user, group
+    DBManager()
 
     logger.info("Server started")
     return app
