@@ -11,7 +11,7 @@ All common patterns are from the clients' perspective.
 - Ask user for email/password
 - Create salt
 - hash password using salt
-- send the email, hashed password and salt to the server using a [user](#apiuser) PUT request
+- send the email, hashed password and salt to the server using a [user](#apiuser) POST request
 
 ### User login
 
@@ -68,18 +68,18 @@ All common patterns are from the clients' perspective.
     - GET
 - [/api/token](#apitoken)
     - GET
-    - TOKEN
+    - DELETE
 - [/api/message](#apimessage)
     - GET
-    - PUT
+    - POST
     - DELETE
 - [/api/user](#apiuser)
     - GET
-    - PUT
+    - POST
     - DELETE
 - [/api/group](#apigroup)
     - GET
-    - PUT
+    - POST
     - DELETE
 
 ### /api/salt
@@ -149,7 +149,7 @@ Returns:
 - "data": (A dictionary containing the resulting data, or a string containing the error message)
     - "message": [message](#message)
 
-#### PUT
+#### POST
 
 Sends a new message.
 
@@ -206,7 +206,7 @@ Returns:
 - "data": (A dictionary containing the resulting data, or a string containing the error message)
     - "user": [user](#user)
 
-#### PUT
+#### POST
 
 Client:
 
@@ -254,7 +254,7 @@ Returns:
 - "data": (A dictionary containing the resulting data, or a string containing the error message)
     - "group": [group](#group)
 
-#### PUT
+#### POST
 
 Creates a new group and adds the user sending the request as an admin.
 
