@@ -1,4 +1,5 @@
 """Module to start a webservice to interact with the user"""
+import argparse
 import json
 import os
 
@@ -35,7 +36,27 @@ def read_config():
 
     return default_conf
 
-def setup():
+def parse_args():
+    """Read the commandline args"""
+
+    parser = argparse.ArgumentParser(prog="DuckTalk_backend")
+    parser.add_argument("--port", type=str, required=False)
+    parser.add_argument("-p", type=str, required=False)
+    parser.add_argument("--dbfile", type=str, required=False)
+    args = vars(parser.parse_args())
+
+    config = read_config()
+
+    if args["port"] is not None:
+        config["port"] = args["port"]
+    if args["p"] is not None:
+        config["port"] = args["p"]
+    if args["dbfile"] is not None:
+        config["dbfile"] = args["dbfile"]
+
+    return config
+
+def setup(args: dict):
     """Setup flask app"""
 
     app = Flask(__name__)
@@ -43,6 +64,9 @@ def setup():
 
     logger.info("Loading endpoints")
     from endpoints import salt, token, message, user, group
+    
+    if "dbfile" in args.keys():
+        DBManager._dbfile = args["dbfile"]
     DBManager()
 
     logger.info("Server started")
@@ -54,6 +78,6 @@ def run(app: Flask, config):
     app.run(debug=config["debug"], host='0.0.0.0', port=config["port"])
 
 if __name__ == "__main__":
-    config = read_config()
-    app = setup()
-    run(app, config)
+    args = parse_args()
+    app = setup(args)
+    run(app, args)

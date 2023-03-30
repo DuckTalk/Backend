@@ -24,7 +24,7 @@ class DBManager():
             print(DBManager.get_inst())
             raise Exception("Can only have one DBManager inst at a time")
 
-        db_connection = sqlalchemy.create_engine("sqlite:///src/database/database.db",
+        db_connection = sqlalchemy.create_engine(f"sqlite:///{self._dbfile}",
                                                  connect_args={'check_same_thread': False})
         Base.metadata.create_all(db_connection)
 
@@ -36,6 +36,7 @@ class DBManager():
 
     _inst = None
     lock = Lock()
+    _dbfile = "src/database/database.db"
 
     @staticmethod
     def get_inst():
