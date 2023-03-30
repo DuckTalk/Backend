@@ -7,5 +7,5 @@ import pytest
 def server():
     import app
     Thread(target=app.run_app, args=(["--dbfile", "src/tests/test.db", "-p", "2007"],), daemon=True).start()
-    sleep(3)
+    sleep(1)
     yield "http://ableytner.ddns.net:2007"

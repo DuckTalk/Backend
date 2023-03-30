@@ -19,6 +19,7 @@ class User(Base):
     publickey = sqlalchemy.Column(sqlalchemy.String, nullable=False)
     salt = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     hashed_pw = sqlalchemy.Column(sqlalchemy.String, nullable=True)
+    token = sqlalchemy.Column(sqlalchemy.String, unique=True)
     groupusers = relationship("GroupUser", cascade="all,delete", uselist=True, backref="user")
     privatemessages = relationship("PrivateMessage", cascade="all,delete", uselist=True, backref="user")
 

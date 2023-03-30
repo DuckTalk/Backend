@@ -17,7 +17,8 @@ def handle_user():
     if request.method == "POST":
         resp = add_user(payload["data"])
     if request.method == "DELETE":
-        resp = {"text": f"{request.method} /api/user"}
+        delete_user(payload["auth"]["token"])
+        resp = {}
 
     return rf.format(resp)
 
@@ -40,3 +41,10 @@ def get_user(data: dict):
     if saved_user is None:
         return f"User with id '{data['user_id']}' not found"
     return data_classes.User.from_userdb(saved_user).to_json_obj()
+
+def delete_user(token: str):
+    saved_user = DBManager.get_inst().get_userdb_from_token(token)
+    if saved_user is None:
+        return f"User with token '{token}' not found"
+    DBManager.get_inst().delete_user(saved_user.user_id)
+    return {}

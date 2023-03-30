@@ -44,7 +44,7 @@ class DBManager():
 
     def add_user(self, username, email, publickey, salt, hashed_pw) -> None:
         with self.lock:
-            user_obj = Userdb(username=username, email=email, publickey=publickey, salt=salt, hashed_pw=hashed_pw)
+            user_obj = Userdb(username=username, email=email, publickey=publickey, salt=salt, hashed_pw=hashed_pw, token=f"user{self.session.query(Userdb).count()}")
             self.session.add(user_obj)
         self.commit()
 
@@ -63,3 +63,9 @@ class DBManager():
 
     def get_userdb_from_id(self, user_id: int) -> Userdb | None:
         return self.session.query(Userdb).filter(Userdb.user_id==user_id).first()
+
+    def get_userdb_from_token(self, token: str) -> Userdb | None:
+        return self.session.query(Userdb).filter(Userdb.token==token).first()
+    
+    def delete_user(self, user_id: int) -> None:
+        self.session.query(Userdb).filter(Userdb.user_id==user_id).delete()
