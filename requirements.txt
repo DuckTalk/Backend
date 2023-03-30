@@ -3,4 +3,3 @@ requests
 coloredlogs
 sqlalchemy
 pytest
-pytest-xprocess

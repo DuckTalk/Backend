@@ -36,14 +36,17 @@ def read_config():
 
     return default_conf
 
-def parse_args():
+def parse_args(in_args: dict | None = None):
     """Read the commandline args"""
 
     parser = argparse.ArgumentParser(prog="DuckTalk_backend")
     parser.add_argument("--port", type=str, required=False)
     parser.add_argument("-p", type=str, required=False)
     parser.add_argument("--dbfile", type=str, required=False)
-    args = vars(parser.parse_args())
+    if in_args is None:
+        args = vars(parser.parse_args())
+    else:
+        args = vars(parser.parse_args(in_args))
 
     config = read_config()
 
@@ -76,6 +79,11 @@ def run(app: Flask, config):
     """runs the app"""
 
     app.run(debug=config["debug"], host='0.0.0.0', port=config["port"])
+
+def run_app(in_args):
+    args = parse_args(in_args)
+    app = setup(args)
+    run(app, args)
 
 if __name__ == "__main__":
     args = parse_args()

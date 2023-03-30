@@ -17,3 +17,6 @@ sys.path.append(f"{pathlib.Path(__file__).parent}")
 
 from tests.fixtures import *
 #pylint: enable=wrong-import-position
+
+if os.path.isfile("src/tests/test.db"):
+    os.remove("src/tests/test.db")

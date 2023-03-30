@@ -9,11 +9,15 @@ logger = CustomLogger().setup()
 @app.route('/api/user', methods=['GET', 'POST', 'DELETE'])
 def handle_user():
     payload = request.json
+    if "data" not in payload.keys():
+        return {"Error": "missing data"}
 
     if request.method == "GET":
         resp = get_user(payload["data"])
     if request.method == "POST":
         resp = add_user(payload["data"])
+    if request.method == "DELETE":
+        resp = {"text": f"{request.method} /api/user"}
 
     return rf.format(resp)
 

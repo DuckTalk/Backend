@@ -1,7 +1,5 @@
 import requests
 
-from tests.fixtures import server
-
 def test_exist(server):
     endpoints = [
         ("salt", (True, False, False)),
