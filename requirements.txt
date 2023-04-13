@@ -3,3 +3,4 @@ requests
 coloredlogs
 sqlalchemy
 pytest
+pytest-order
