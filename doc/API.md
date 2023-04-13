@@ -230,6 +230,8 @@ Client:
 - "auth": (A dictionary containing authentification data)
     - "type": "token" (The type of authentification)
     - "token": "" (The token that was received before)
+- "data": (A dictionary containing the request data)
+    - "user_id": 15 (The id of the requested user)
 
 Returns:
 
