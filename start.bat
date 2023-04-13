@@ -1,1 +1,1 @@
-py src/app.py
+py src/app.py %*

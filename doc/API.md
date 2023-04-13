@@ -212,7 +212,8 @@ Client:
 
 - "type": "user" (Defines what is requested)
 - "data": (A dictionary containing the request data)
-    - "email": "testuser@mail.com" (The user email)
+    - "username": "Test User" (The username)
+    - "email": "testuser@mail.com" (The user email, has to be unique)
     - "pw_hash": "" (The hashed user password)
     - "salt": "" (The password hashing salt for the created user)
 
