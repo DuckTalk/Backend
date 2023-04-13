@@ -15,20 +15,11 @@ def handle_user():
     if request.method == "GET":
         resp = get_user(payload["data"])
     if request.method == "POST":
-        resp = add_user(payload["data"])
+        resp = post_user(payload["data"])
     if request.method == "DELETE":
         resp = delete_user(payload["data"])
 
     return rf.format(resp)
-
-def add_user(data: dict):
-    required_keys = ["username", "email", "pw_hash", "salt"]
-    for key in required_keys:
-        if not key in data.keys():
-            return f"Missing key '{key}' in request {data}"
-
-    DBManager.get_inst().add_user(data["username"], data["email"], "some_key", data["pw_hash"], data["salt"])
-    return {}
 
 def get_user(data: dict):
     required_keys = ["user_id"]
@@ -40,6 +31,15 @@ def get_user(data: dict):
     if saved_user is None:
         return f"User with id '{data['user_id']}' not found"
     return data_classes.User.from_userdb(saved_user).to_json_obj()
+
+def post_user(data: dict):
+    required_keys = ["username", "email", "pw_hash", "salt"]
+    for key in required_keys:
+        if not key in data.keys():
+            return f"Missing key '{key}' in request {data}"
+
+    DBManager.get_inst().add_user(data["username"], data["email"], "some_key", data["pw_hash"], data["salt"])
+    return {}
 
 def delete_user(data: dict):
     saved_user = DBManager.get_inst().get_userdb_from_id(data["user_id"])
