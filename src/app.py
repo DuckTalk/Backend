@@ -66,7 +66,7 @@ def setup(args: dict):
     app.app_context().push()
 
     logger.info("Loading endpoints")
-    from endpoints import salt, token, message, user, group
+    from endpoints import salt, token, message, user, group, home
     
     if "dbfile" in args.keys():
         DBManager._dbfile = args["dbfile"]
