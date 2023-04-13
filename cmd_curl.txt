@@ -1,1 +1,0 @@
-curl -d "{\"testkey\":\"testvalue\"}" http://ableytner.ddns.net:2006/api/user
