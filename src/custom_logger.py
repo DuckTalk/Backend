@@ -23,10 +23,11 @@ class CustomLogger():
         self.logger.setLevel(logging.INFO)
         
         # log to file
-        fileh = logging.FileHandler("latest.log", "a")
-        formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-        fileh.setFormatter(formatter)
-        self.logger.addHandler(fileh)
+        if len(self.logger.handlers) == 0:
+            fileh = logging.FileHandler("latest.log", "a")
+            formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s',datefmt='%d-%m-%Y %H:%M:%S')
+            fileh.setFormatter(formatter)
+            self.logger.addHandler(fileh)
 
         # create console handler and set level to debug
         console_handler = logging.StreamHandler()
@@ -40,7 +41,7 @@ class CustomLogger():
         }
 
         coloredlogs.install(level='DEBUG', logger=self.logger, handler=console_handler,
-                            fmt='%(asctime)s %(levelname)s %(message)s',datefmt='%Y-%d-%m %H:%M:%S')
+                            fmt='%(asctime)s %(levelname)s %(message)s',datefmt='%d-%m-%Y %H:%M:%S')
 
     def setup(self):
         """
