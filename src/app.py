@@ -81,6 +81,8 @@ def run(app: Flask, config):
     app.run(debug=config["debug"], host='0.0.0.0', port=config["port"])
 
 def run_app(in_args):
+    logger.info("--------------------------------")
+    logger.info("Starting server...")
     args = parse_args(in_args)
     app = setup(args)
     run(app, args)

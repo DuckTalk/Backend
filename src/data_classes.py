@@ -47,3 +47,21 @@ class Message():
     sender: User
     receiver: User|Group
     content: str
+
+    def to_json_obj(self) -> dict:
+        if isinstance(self.receiver, Group):
+            receiver = {
+                "type": "group",
+                "group_id": self.receiver.group_id
+            }
+        else:
+            receiver = {
+                "type": "user",
+                "user_id": self.receiver.user_id
+            }
+        return {
+            "message_id": self.message_id,
+            "sender_id": self.sender.user_id,
+            "receiver": receiver,
+            "content": self.content
+        }
