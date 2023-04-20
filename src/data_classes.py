@@ -2,7 +2,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 from database.model import User as Userdb, Group as Groupdb, GroupUser as GroupUserdb, \
-                           PrivateMessage as PrivateMessagedb, GroupMessage as GroupMessagedb
+                           Message as Messagedb
 
 @dataclass
 class User():
@@ -10,10 +10,6 @@ class User():
     username: str
     email: str
     publickey: str
-
-    @staticmethod
-    def from_userdb(user_db: Userdb) -> User:
-        return User(user_db.user_id, user_db.username, user_db.email, user_db.publickey)
 
     def to_json_obj(self) -> dict:
         return {
@@ -27,11 +23,27 @@ class Group():
     group_id: int
     groupname: str
     description: str
-    members: dict[int, dict[str, User|bool]]
+    members: list[tuple[User, bool]]
+
+    def to_json_obj(self) -> dict:
+        members = {}
+        c = 0
+        while (c < len(self.members)):
+            members[c] = {
+                "user_id": self.members[c][0].user_id,
+                "admin": self.members[c][1]
+            }
+            c += 1
+        return {
+            "group_id": self.group_id,
+            "groupname": self.groupname,
+            "description": self.description,
+            "members": members
+        }
 
 @dataclass
 class Message():
     message_id: int
-    sender_id: int
-    receiver: dict[str, User|Group|int]
+    sender: User
+    receiver: User|Group
     content: str

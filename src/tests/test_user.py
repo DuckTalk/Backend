@@ -30,6 +30,15 @@ def test_user_post(server):
     assert user["publickey"] != ""
 
 @pytest.mark.order(2)
+def test_user_get(server):
+    resp = requests.get(f"{server}/api/user/1", timeout=5)
+    assert not resp.json()["error"]
+    user = resp.json()["data"]
+    assert user["user_id"] == 1
+    assert user["username"] == "Test User"
+    assert user["publickey"] != ""
+
+@pytest.mark.order(3)
 def test_user_delete(server):
     get_payload = {
         "type": "user",

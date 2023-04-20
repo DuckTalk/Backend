@@ -9,7 +9,7 @@ import sqlalchemy
 from sqlalchemy.orm import scoped_session, sessionmaker
 
 from database.model import Base, User as Userdb, Group as Groupdb, GroupUser as GroupUserdb, \
-                           PrivateMessage as PrivateMessagedb, GroupMessage as GroupMessagedb
+                           Message as Messagedb
 from data_classes import User, Group, Message
 from custom_logger import CustomLogger
 logger = CustomLogger().setup()
@@ -21,7 +21,7 @@ class DBManager():
 
     def __init__(self):
         if DBManager.get_inst() is not None:
-            print(DBManager.get_inst())
+            return DBManager.get_inst()
             raise Exception("Can only have one DBManager inst at a time")
 
         db_connection = sqlalchemy.create_engine(f"sqlite:///{self._dbfile}",
@@ -58,6 +58,9 @@ class DBManager():
                 logger.debug("Committing database changes failed, rolling back")
                 self.session.rollback()
 
+    def get_groupdb_from_id(self, group_id: int) -> Groupdb | None:
+        return self.session.query(Groupdb).filter(Groupdb.group_id==group_id).first()
+
     def get_userdb_from_email(self, email: str) -> Userdb | None:
         return self.session.query(Userdb).filter(Userdb.email==email).first()
 
@@ -69,3 +72,33 @@ class DBManager():
     
     def delete_user(self, user_id: int) -> None:
         self.session.query(Userdb).filter(Userdb.user_id==user_id).delete()
+
+    # converters
+    @staticmethod
+    def user_from_userdb(user_db: Userdb) -> User:
+        return User(user_db.user_id, user_db.username, user_db.email, user_db.publickey)
+
+    @staticmethod
+    def user_from_groupuserdb(groupuser_db: GroupUserdb) -> User:
+        stored_user = DBManager.get_inst().get_userdb_from_id(groupuser_db.user_id)
+        return DBManager.user_from_userdb(stored_user)
+
+    @staticmethod
+    def group_from_groupdb(group_db: Groupdb) -> Group:
+        members = []
+        for member in group_db.groupusers:
+            members.append((DBManager.user_from_groupuserdb(member), member.isadmin))
+        return Group(group_db.group_id, group_db.groupname, group_db.description, members)
+
+    @staticmethod
+    def message_from_messagedb(message_db: Messagedb) -> Message:
+        sender = DBManager.user_from_userdb(DBManager.get_inst().get_userdb_from_id(message_db.sender_id))
+        
+        stored_group = DBManager.get_inst().get_groupdb_from_id(message_db.group_id)
+        receiver = DBManager.group_from_groupdb(stored_group)
+        if stored_group.is_privatechat:
+            for member in receiver.members:
+                if member[0].user_id != sender.user_id:
+                    receiver = member[0]
+        
+        return Message(message_db.message_id, sender, receiver, message_db.content)
