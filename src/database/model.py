@@ -43,7 +43,7 @@ class Group(Base):
     groupname = sqlalchemy.Column(sqlalchemy.String, nullable=False)
     description = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     groupusers = relationship("GroupUser", cascade="all,delete", uselist=True, backref="group")
-    groupmessages = relationship("GroupMessage", cascade="all,delete", uselist=True, backref="group")
+    groupmessages = relationship("Message", cascade="all,delete", uselist=True, backref="group")
 
 class Message(Base):
     """Message representation."""
@@ -51,5 +51,7 @@ class Message(Base):
     __tablename__ = "message"
     message_id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True)
     content = sqlalchemy.Column(sqlalchemy.String, nullable=False)
+    group_id = sqlalchemy.Column(sqlalchemy.Integer,
+                                 sqlalchemy.ForeignKey("group.group_id"))
     sender_id = sqlalchemy.Column(sqlalchemy.Integer,
                                   sqlalchemy.ForeignKey("groupuser.groupuser_id"))

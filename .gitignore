@@ -5,3 +5,4 @@
 *.pyc
 *.db
 config.json
+latest.log

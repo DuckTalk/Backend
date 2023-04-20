@@ -21,6 +21,12 @@ class CustomLogger():
         # create logger
         self.logger = logging.getLogger('custom_logger')
         self.logger.setLevel(logging.INFO)
+        
+        # log to file
+        fileh = logging.FileHandler("latest.log", "a")
+        formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+        fileh.setFormatter(formatter)
+        self.logger.addHandler(fileh)
 
         # create console handler and set level to debug
         console_handler = logging.StreamHandler()
