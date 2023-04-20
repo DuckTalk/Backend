@@ -88,6 +88,4 @@ def run_app(in_args):
     run(app, args)
 
 if __name__ == "__main__":
-    args = parse_args()
-    app = setup(args)
-    run(app, args)
+    run_app(None)

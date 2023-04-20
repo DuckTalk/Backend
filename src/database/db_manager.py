@@ -55,7 +55,7 @@ class DBManager():
             try:
                 self.session.commit()
             except sqlalchemy.exc.IntegrityError:
-                logger.debug("Committing database changes failed, rolling back")
+                logger.error("Committing database changes failed, rolling back")
                 self.session.rollback()
 
     def get_groupdb_from_id(self, group_id: int) -> Groupdb | None:
@@ -71,7 +71,9 @@ class DBManager():
         return self.session.query(Userdb).filter(Userdb.token==token).first()
     
     def delete_user(self, user_id: int) -> None:
-        self.session.query(Userdb).filter(Userdb.user_id==user_id).delete()
+        with self.lock:
+            self.session.query(Userdb).filter(Userdb.user_id==user_id).delete()
+        self.commit()
 
     # converters
     @staticmethod

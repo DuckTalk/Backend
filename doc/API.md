@@ -85,12 +85,11 @@ All common patterns are from the clients' perspective.
 ### /api/salt
 
 #### GET
+Request the salt for password hashing of an existing account
 
 Client: 
 
-- "type": "salt" (Defines what is requested)
-- "data": (A dictionary containing the request data)
-    - "email": "testuser@mail.com" (The user email)
+?email=someuser@mail.com
 
 Returns:
 
@@ -101,12 +100,11 @@ Returns:
 ### /api/token
 
 #### GET
+Request a new token
 
 Client:
 
-- "type": "token" (Defines what is requested)
-- "auth": (A dictionary containing authentification data)
-    - "type": "password" (The type of authentification)
+- "data": (A dictionary containing the request data)
     - "email": "testuser@mail.com" (The user email)
     - "pw_hash": "" (The hashed user password)
 
@@ -114,15 +112,14 @@ Returns:
 
 - "error": True | False (boolean value whether the request raised an error)
 - "data": (A dictionary containing the resulting data, or a string containing the error message)
-    - "token": "" (The token used to authentificate as the user)
+    - "token": "" (The token used to authenticate as the user)
 
 #### DELETE
+Invalidate a client token
 
 Client:
 
-- "type": "token" (Defines what is requested)
-- "auth": (A dictionary containing the request data)
-    - "type": "token" (The type of authentification)
+- "data": (A dictionary containing the request data)
     - "token": "" (The token to be invalidated)
 
 Returns:
@@ -134,14 +131,11 @@ Returns:
 
 #### GET
 
+Get a message that's already sent
+
 Client:
 
-- "type": "message" (Defines what is requested)
-- "auth": (A dictionary containing authentification data)
-    - "type": "token" (The type of authentification)
-    - "token": "" (The token that was received before)
-- "data": (A dictionary containing the request data)
-    - "message_id": 15 (The id of the requested message)
+GET /api/message/message_id
 
 Returns:
 
@@ -151,14 +145,10 @@ Returns:
 
 #### POST
 
-Sends a new message.
+Send a new message
 
 Client:
 
-- "type": "message" (Defines what is requested)
-- "auth": (A dictionary containing authentification data)
-    - "type": "token" (The type of authentification)
-    - "token": "" (The token that was received before)
 - "data": (A dictionary containing the request data)
     - "receiver": (A dictionary of data about the receiver of the message)
         - "type": "user" (The type of message receiver, either "user" or "group")
@@ -173,12 +163,10 @@ Returns:
 
 #### DELETE
 
+Delete a message
+
 Client:
 
-- "type": "message" (Defines what is requested)
-- "auth": (A dictionary containing authentification data)
-    - "type": "token" (The type of authentification)
-    - "token": "" (The token that was received before)
 - "data": (A dictionary containing the request data)
     - "message_id": 38 (The id of the message to be deleted)
 
@@ -191,14 +179,11 @@ Returns:
 
 #### GET
 
+Request a user by id
+
 Client:
 
-- "type": "user" (Defines what is requested)
-- "auth": (A dictionary containing authentification data)
-    - "type": "token" (The type of authentification)
-    - "token": "" (The token that was received before)
-- "data": (A dictionary containing the request data)
-    - "user_id": 15 (The id of the requested user)
+GET /api/user/user_id
 
 Returns:
 
@@ -208,9 +193,10 @@ Returns:
 
 #### POST
 
+Create a new user
+
 Client:
 
-- "type": "user" (Defines what is requested)
 - "data": (A dictionary containing the request data)
     - "username": "Test User" (The username)
     - "email": "testuser@mail.com" (The user email, has to be unique)
@@ -220,16 +206,15 @@ Client:
 Returns:
 
 - "error": True | False (boolean value whether the request raised an error)
-- "data": (An empty dictionary, or a string containing the error message)
+- "data": (A dictionary containing the resulting data, or a string containing the error message)
+    - "user_id": 15 (The id of the created user)
 
 #### DELETE
 
+Delete a user
+
 Client:
 
-- "type": "user" (Defines what is requested)
-- "auth": (A dictionary containing authentification data)
-    - "type": "token" (The type of authentification)
-    - "token": "" (The token that was received before)
 - "data": (A dictionary containing the request data)
     - "user_id": 15 (The id of the requested user)
 
@@ -242,14 +227,11 @@ Returns:
 
 #### GET
 
+Get an existing group by its id
+
 Client:
 
-- "type": "group" (Defines what is requested)
-- "auth": (A dictionary containing authentification data)
-    - "type": "token" (The type of authentification)
-    - "token": "" (The token that was received before)
-- "data": (A dictionary containing the request data)
-    - "group_id": 38 (The id of the requested group)
+GET /api/group/group_id
 
 Returns:
 
@@ -259,17 +241,14 @@ Returns:
 
 #### POST
 
-Creates a new group and adds the user sending the request as an admin.
+Create a new group and add the user sending the request as an admin.
 
 Client:
 
-- "type": "group" (Defines what is requested)
-- "auth": (A dictionary containing authentification data)
-    - "type": "token" (The type of authentification)
-    - "token": "" (The token that was received before)
 - "data": (A dictionary containing the request data)
     - "groupname": "TestGroup" (The name of the new group)
     - "description": "This is another test group" (The description of the new group, can be empty)
+    - "user_id": 52 (The id of the user creatign the group)
 
 Returns:
 
@@ -279,12 +258,10 @@ Returns:
 
 #### DELETE
 
+Delete a group
+
 Client:
 
-- "type": "group" (Defines what is requested)
-- "auth": (A dictionary containing authentification data)
-    - "type": "token" (The type of authentification)
-    - "token": "" (The token that was received before)
 - "data": (A dictionary containing the request data)
     - "group_id": 38 (The id of the group to be deleted)
 

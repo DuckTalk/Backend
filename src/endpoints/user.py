@@ -34,7 +34,7 @@ def get_user_by_id(user_id: int):
         if saved_user is None:
             resp = f"User with id '{user_id}' not found"
         else:
-            resp = data_classes.User.from_userdb(saved_user).to_json_obj()
+            resp = DBManager.user_from_userdb(saved_user).to_json_obj()
 
         return rf.format(resp)
     except Exception as e:
@@ -49,7 +49,7 @@ def get_user(data: dict):
     saved_user = DBManager.get_inst().get_userdb_from_id(data["user_id"])
     if saved_user is None:
         return f"User with id '{data['user_id']}' not found"
-    return data_classes.User.from_userdb(saved_user).to_json_obj()
+    return DBManager.user_from_userdb(saved_user).to_json_obj()
 
 def post_user(data: dict):
     required_keys = ["username", "email", "pw_hash", "salt"]
@@ -58,7 +58,7 @@ def post_user(data: dict):
             return f"Missing key '{key}' in request {data}"
 
     DBManager.get_inst().add_user(data["username"], data["email"], "some_key", data["pw_hash"], data["salt"])
-    return {}
+    return {"user_id": DBManager.get_inst().get_userdb_from_email(data["email"]).user_id}
 
 def delete_user(data: dict):
     saved_user = DBManager.get_inst().get_userdb_from_id(data["user_id"])
