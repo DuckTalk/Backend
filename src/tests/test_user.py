@@ -20,6 +20,7 @@ def test_user_fail_missingkeys(server):
     resp = requests.post(f"{server}/api/user", json={"data": user_data}, timeout=5)
     assert resp.json()["error"], resp.json()["data"]
     assert resp.json()["data"] == "Missing key 'username'"
+
     user_data = {
         "username": "Fail User",
         "pw_hash": "abcde",
@@ -28,6 +29,7 @@ def test_user_fail_missingkeys(server):
     resp = requests.post(f"{server}/api/user", json={"data": user_data}, timeout=5)
     assert resp.json()["error"], resp.json()["data"]
     assert resp.json()["data"] == "Missing key 'email'"
+
     user_data = {
         "username": "Fail User",
         "email": "failuser@mail.com",
@@ -36,6 +38,7 @@ def test_user_fail_missingkeys(server):
     resp = requests.post(f"{server}/api/user", json={"data": user_data}, timeout=5)
     assert resp.json()["error"], resp.json()["data"]
     assert resp.json()["data"] == "Missing key 'pw_hash'"
+
     user_data = {
         "username": "Fail User",
         "email": "failuser@mail.com",

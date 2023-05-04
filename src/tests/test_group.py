@@ -9,6 +9,42 @@ group_data = {
     "description": "A test group for pytest"
 }
 
+def test_group_fail_missingkeys(server, testuser):
+    group_data = {
+        "description": "A test group for pytest",
+        "user_id": testuser["user_id"]
+    }
+    resp = requests.post(f"{server}/api/group", json={"data": group_data}, timeout=5)
+    assert resp.json()["error"], resp.json()["data"]
+    assert resp.json()["data"] == "Missing key 'groupname'"
+
+    group_data = {
+        "groupname": "Test Group",
+        "user_id": testuser["user_id"]
+    }
+    resp = requests.post(f"{server}/api/group", json={"data": group_data}, timeout=5)
+    assert resp.json()["error"], resp.json()["data"]
+    assert resp.json()["data"] == "Missing key 'description'"
+
+    group_data = {
+        "groupname": "Test Group",
+        "description": "A test group for pytest"
+    }
+    resp = requests.post(f"{server}/api/group", json={"data": group_data}, timeout=5)
+    assert resp.json()["error"], resp.json()["data"]
+    assert resp.json()["data"] == "Missing key 'user_id'"
+
+def test_group_fail_invalidid(server):
+    for user_id in [0, -1, "test", ""]:
+        group_data = {
+            "groupname": "Test Group",
+            "description": "A test group for pytest",
+            "user_id": user_id
+        }
+        resp = requests.post(f"{server}/api/group", json={"data": group_data}, timeout=5)
+        assert resp.json()["error"], resp.json()["data"]
+        assert resp.json()["data"] == f"User with user_id {user_id} not found"
+
 @pytest.mark.order(1)
 def test_group_post(server, testuser):
     global group_data
