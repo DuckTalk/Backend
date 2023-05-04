@@ -46,3 +46,25 @@ def testuser2(server):
     user_data["user_id"] = resp.json()["data"]["user_id"]
 
     yield user_data
+
+@pytest.fixture
+def testuser3(server):
+    user_data = {
+        "username": "Test User",
+        "email": "testuser3@mail.com",
+        "pw_hash": "abcde",
+        "salt": "some_salt"
+    }
+    post_payload = {
+        "data": user_data
+    }
+    resp = requests.post(f"{server}/api/user", json=post_payload, timeout=5)
+    assert not resp.json()["error"], resp.json()["data"]
+    assert isinstance(resp.json()["data"]["user_id"], int)
+    user_data["user_id"] = resp.json()["data"]["user_id"]
+
+    yield user_data
+
+@pytest.fixture
+def testgroup(testuser, testuser2, testuser3):
+    pass
