@@ -42,11 +42,38 @@ class DBManager():
     def get_inst():
         return DBManager._inst
 
-    def add_user(self, username, email, publickey, salt, hashed_pw) -> None:
+    def add_group(self, members: list[Userdb], is_privatechat: bool, groupname: str, description: str) -> int:
+        with self.lock:
+            stored_group = Groupdb(is_privatechat=is_privatechat, groupname=groupname, description=description)
+            self.session.add(stored_group)
+            for member in members:
+                groupuser = GroupUserdb(isadmin=True)
+                self.session.add(groupuser)
+                member.groupusers.append(groupuser)
+                stored_group.groupusers.append(groupuser)
+        self.commit()
+        return stored_group.group_id
+
+    def add_message(self, content, sender_id, group_id) -> int:
+        with self.lock:
+            stored_sender_user = self.get_userdb_from_id(sender_id)
+            stored_receiver = self.get_groupdb_from_id(group_id)
+            for groupuser in stored_receiver.groupusers:
+                if groupuser.user_id == stored_sender_user.user_id:
+                    stored_sender: GroupUserdb = groupuser
+            message_obj = Messagedb(content=content)
+            stored_sender.messages.append(message_obj)
+            stored_receiver.groupmessages.append(message_obj)
+            self.session.add(message_obj)
+        self.commit()
+        return message_obj.message_id
+
+    def add_user(self, username, email, publickey, salt, hashed_pw) -> int:
         with self.lock:
             user_obj = Userdb(username=username, email=email, publickey=publickey, salt=salt, hashed_pw=hashed_pw, token=f"user{self.session.query(Userdb).count()}")
             self.session.add(user_obj)
         self.commit()
+        return user_obj.user_id
 
     def commit(self) -> None:
         """Commits changes to database"""
@@ -55,11 +82,17 @@ class DBManager():
             try:
                 self.session.commit()
             except sqlalchemy.exc.IntegrityError:
-                logger.debug("Committing database changes failed, rolling back")
+                logger.error("Committing database changes failed, rolling back")
                 self.session.rollback()
 
     def get_groupdb_from_id(self, group_id: int) -> Groupdb | None:
         return self.session.query(Groupdb).filter(Groupdb.group_id==group_id).first()
+
+    def get_groupuserdb_from_id(self, groupuser_id: int) -> GroupUserdb | None:
+        return self.session.query(GroupUserdb).filter(GroupUserdb.groupuser_id==groupuser_id).first()
+
+    def get_messagedb_from_id(self, message_id: int) -> Messagedb | None:
+        return self.session.query(Messagedb).filter(Messagedb.message_id==message_id).first()
 
     def get_userdb_from_email(self, email: str) -> Userdb | None:
         return self.session.query(Userdb).filter(Userdb.email==email).first()
@@ -71,7 +104,9 @@ class DBManager():
         return self.session.query(Userdb).filter(Userdb.token==token).first()
     
     def delete_user(self, user_id: int) -> None:
-        self.session.query(Userdb).filter(Userdb.user_id==user_id).delete()
+        with self.lock:
+            self.session.query(Userdb).filter(Userdb.user_id==user_id).delete()
+        self.commit()
 
     # converters
     @staticmethod
