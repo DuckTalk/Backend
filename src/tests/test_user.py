@@ -19,14 +19,14 @@ def test_user_post(server):
         "data": user_data
     }
     resp = requests.post(f"{server}/api/user", json=post_payload, timeout=5)
-    assert not resp.json()["error"]
+    assert not resp.json()["error"], resp.json()["data"]
     assert isinstance(resp.json()["data"]["user_id"], int)
     user_data["user_id"] = resp.json()["data"]["user_id"]
 
 @pytest.mark.order(2)
 def test_user_get(server):
     resp = requests.get(f"{server}/api/user/{user_data['user_id']}", timeout=5)
-    assert not resp.json()["error"]
+    assert not resp.json()["error"], resp.json()["data"]
     user = resp.json()["data"]
     assert user["user_id"] == user_data["user_id"]
     assert user["username"] == user_data["username"]
@@ -34,16 +34,10 @@ def test_user_get(server):
 
 @pytest.mark.order(3)
 def test_user_delete(server):
-    delete_payload = {
-        "type": "user",
-        "data": {
-            "user_id": user_data["user_id"]
-        }
-    }
-    resp = requests.delete(f"{server}/api/user", json=delete_payload, timeout=5)
-    assert not resp.json()["error"]
+    resp = requests.delete(f"{server}/api/user/{user_data['user_id']}", timeout=5)
+    assert not resp.json()["error"], resp.json()["data"]
     assert resp.json()["data"] == {}
 
     resp = requests.get(f"{server}/api/user/{user_data['user_id']}", timeout=5)
-    assert resp.json()["error"]
+    assert resp.json()["error"], resp.json()["data"]
     assert isinstance(resp.json()["data"], str)

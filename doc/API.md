@@ -141,7 +141,7 @@ Returns:
 
 - "error": True | False (boolean value whether the request raised an error)
 - "data": (A dictionary containing the resulting data, or a string containing the error message)
-    - "message": [message](#message)
+    - [message](#message)
 
 #### POST
 
@@ -150,6 +150,7 @@ Send a new message
 Client:
 
 - "data": (A dictionary containing the request data)
+    - "sender_id": 51 (The user_id of the sender)
     - "receiver": (A dictionary of data about the receiver of the message)
         - "type": "user" (The type of message receiver, either "user" or "group")
         - "user_id": 92 (The id of the receiver, the key is either user_id or group_id)
@@ -160,20 +161,6 @@ Returns:
 - "error": True | False (boolean value whether the request raised an error)
 - "data": (A dictionary containing the resulting data, or a string containing the error message)
     - "message_id": 89 (The id of the sent message)
-
-#### DELETE
-
-Delete a message
-
-Client:
-
-- "data": (A dictionary containing the request data)
-    - "message_id": 38 (The id of the message to be deleted)
-
-Returns:
-
-- "error": True | False (boolean value whether the request raised an error)
-- "data": (An empty dictionary, or a string containing the error message)
 
 ### /api/user
 
@@ -189,7 +176,7 @@ Returns:
 
 - "error": True | False (boolean value whether the request raised an error)
 - "data": (A dictionary containing the resulting data, or a string containing the error message)
-    - "user": [user](#user)
+    - [user](#user)
 
 #### POST
 
@@ -237,7 +224,7 @@ Returns:
 
 - "error": True | False (boolean value whether the request raised an error)
 - "data": (A dictionary containing the resulting data, or a string containing the error message)
-    - "group": [group](#group)
+    - [group](#group)
 
 #### POST
 
