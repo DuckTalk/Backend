@@ -127,8 +127,8 @@ class DBManager():
 
     @staticmethod
     def message_from_messagedb(message_db: Messagedb) -> Message:
-        sender = DBManager.user_from_userdb(DBManager.get_inst().get_userdb_from_id(message_db.sender_id))
-        
+        sender = DBManager.user_from_userdb(DBManager.get_inst().get_userdb_from_id(DBManager.get_inst().get_groupuserdb_from_id(message_db.sender_id).user_id))
+
         stored_group = DBManager.get_inst().get_groupdb_from_id(message_db.group_id)
         receiver = DBManager.group_from_groupdb(stored_group)
         if stored_group.is_privatechat:

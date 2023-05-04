@@ -47,7 +47,7 @@ def post_user(data: dict):
     required_keys = ["username", "email", "pw_hash", "salt"]
     for key in required_keys:
         if not key in data.keys():
-            return f"Missing key '{key}' in request {data}"
+            return f"Missing key '{key}'"
 
     DBManager.get_inst().add_user(data["username"], data["email"], "some_key", data["pw_hash"], data["salt"])
     return {"user_id": DBManager.get_inst().get_userdb_from_email(data["email"]).user_id}

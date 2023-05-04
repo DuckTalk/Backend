@@ -135,7 +135,7 @@ Get a message that's already sent
 
 Client:
 
-GET /api/message/message_id
+GET /api/message/<message_id>
 
 Returns:
 
@@ -170,7 +170,7 @@ Request a user by id
 
 Client:
 
-GET /api/user/user_id
+GET /api/user/<user_id>
 
 Returns:
 
@@ -202,8 +202,7 @@ Delete a user
 
 Client:
 
-- "data": (A dictionary containing the request data)
-    - "user_id": 15 (The id of the requested user)
+DELETE /api/user/<user_id>
 
 Returns:
 
@@ -218,7 +217,7 @@ Get an existing group by its id
 
 Client:
 
-GET /api/group/group_id
+GET /api/group/<group_id>
 
 Returns:
 
@@ -235,7 +234,7 @@ Client:
 - "data": (A dictionary containing the request data)
     - "groupname": "TestGroup" (The name of the new group)
     - "description": "This is another test group" (The description of the new group, can be empty)
-    - "user_id": 52 (The id of the user creatign the group)
+    - "user_id": 52 (The id of the user creating the group)
 
 Returns:
 
@@ -249,8 +248,7 @@ Delete a group
 
 Client:
 
-- "data": (A dictionary containing the request data)
-    - "group_id": 38 (The id of the group to be deleted)
+DELETE /api/group/<group_id>
 
 Returns:
 

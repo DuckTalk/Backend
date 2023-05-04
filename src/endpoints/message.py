@@ -15,8 +15,7 @@ def handle_message():
         if "data" not in payload.keys():
             return rf.format(f"Missing key 'data'")
 
-        if request.method == "POST":
-            return rf.format(post_message(payload["data"]))
+        return rf.format(post_message(payload["data"]))
     except Exception as e:
         logger.error(e)
 
@@ -38,10 +37,19 @@ def post_message(data: dict):
     for key in required_keys:
         if not key in data.keys():
             return f"Missing key '{key}'"
+    
+    if not "type" in data["receiver"].keys():
+        return "Missing key 'type'"
 
     if data["receiver"]["type"] == "group":
+        if not "group_id" in data["receiver"].keys():
+            return "Missing key 'group_id'"
+
         return _post_gm(data)
     else:
+        if not "user_id" in data["receiver"].keys():
+            return "Missing key 'user_id'"
+
         return _post_pm(data)
 
 def _post_gm(data: dict):
