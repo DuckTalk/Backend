@@ -72,7 +72,6 @@ All common patterns are from the clients' perspective.
 - [/api/message](#apimessage)
     - GET
     - POST
-    - DELETE
 - [/api/user](#apiuser)
     - GET
     - POST
@@ -80,7 +79,6 @@ All common patterns are from the clients' perspective.
 - [/api/group](#apigroup)
     - GET
     - POST
-    - DELETE
 
 ### /api/salt
 

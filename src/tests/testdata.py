@@ -2,6 +2,9 @@ from database.db_manager import DBManager
 from database.model import Base, User as Userdb, Group as Groupdb, GroupUser as GroupUserdb, \
                            Message as Messagedb
 
+from custom_logger import CustomLogger
+logger = CustomLogger().setup()
+
 testuser1 = None
 testuser2 = None
 testuser3 = None
@@ -15,6 +18,8 @@ testmsg3 = None
 testmsg4 = None
 
 def create():
+    logger.info("creating test data")
+
     global testuser1, testuser2, testuser3, testgroup, testgroupuser1, testgroupuser2, testgroupuser3, testmsg1, testmsg2, testmsg3, testmsg4
 
     testuser1 = Userdb(username="The test user 1", email="thetestuser1@mail.com", publickey="some_key", salt="testusersalt", hashed_pw="abcde", token=f"usertesttoken1")

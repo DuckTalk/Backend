@@ -68,7 +68,7 @@ def test_message_fail_missingkeys(server, testuser, testuser2):
     assert resp.json()["error"], resp.json()["data"]
     assert resp.json()["data"] == "Missing key 'content'"
 
-def test_message_post_get(server, testuser, testuser2):
+def test_message_post_get_delete(server, testuser, testuser2):
     message_data = {
         "sender_id": testuser["user_id"],
         "receiver": {
@@ -78,11 +78,13 @@ def test_message_post_get(server, testuser, testuser2):
         "content": "This is a private message for pytest"
     }
 
+    # --------------- POST ---------------
     resp = requests.post(f"{server}/api/message", json={"data": message_data}, timeout=5)
     assert not resp.json()["error"], resp.json()["data"]
     assert isinstance(resp.json()["data"]["message_id"], int)
     message_data["message_id"] = resp.json()["data"]["message_id"]
 
+    # --------------- GET ---------------
     resp = requests.get(f"{server}/api/message/{message_data['message_id']}", timeout=5)
     assert not resp.json()["error"], resp.json()["data"]
     message = resp.json()["data"]

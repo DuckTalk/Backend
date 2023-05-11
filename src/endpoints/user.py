@@ -65,8 +65,6 @@ from tests import testdata
 @app.route("/api/user/test1")
 def get_user_by_id_testdata1():
     try:
-        testdata.create()
-
         resp = DBManager.user_from_userdb(testdata.testuser1).to_json_obj()
 
         return rf.format(resp)
@@ -76,8 +74,6 @@ def get_user_by_id_testdata1():
 @app.route("/api/user/test2")
 def get_user_by_id_testdata2():
     try:
-        testdata.create()
-
         resp = DBManager.user_from_userdb(testdata.testuser2).to_json_obj()
 
         return rf.format(resp)
@@ -87,8 +83,6 @@ def get_user_by_id_testdata2():
 @app.route("/api/user/test3")
 def get_user_by_id_testdata3():
     try:
-        testdata.create()
-
         resp = DBManager.user_from_userdb(testdata.testuser3).to_json_obj()
 
         return rf.format(resp)
