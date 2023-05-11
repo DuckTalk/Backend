@@ -52,8 +52,6 @@ from tests import testdata
 @app.route('/api/group/test')
 def get_group_by_id_testdata():
     try:
-        testdata.create()
-
         resp = DBManager.group_from_groupdb(testdata.testgroup).to_json_obj()
 
         return rf.format(resp)

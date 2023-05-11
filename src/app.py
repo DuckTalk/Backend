@@ -5,6 +5,7 @@ import os
 
 from flask import Flask
 
+from tests import testdata
 from database.db_manager import DBManager
 from custom_logger import CustomLogger
 logger = CustomLogger().setup()
@@ -85,6 +86,7 @@ def run_app(in_args):
     logger.info("Starting server...")
     args = parse_args(in_args)
     app = setup(args)
+    testdata.create()
     run(app, args)
 
 if __name__ == "__main__":

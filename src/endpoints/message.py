@@ -84,8 +84,6 @@ from tests import testdata
 @app.route("/api/message/test1")
 def get_message_by_id_testdata1():
     try:
-        testdata.create()
-
         resp = DBManager.message_from_messagedb(testdata.testmsg1).to_json_obj()
 
         return rf.format(resp)
@@ -95,8 +93,6 @@ def get_message_by_id_testdata1():
 @app.route("/api/message/test2")
 def get_message_by_id_testdata2():
     try:
-        testdata.create()
-
         resp = DBManager.message_from_messagedb(testdata.testmsg2).to_json_obj()
 
         return rf.format(resp)
@@ -106,8 +102,6 @@ def get_message_by_id_testdata2():
 @app.route("/api/message/test3")
 def get_message_by_id_testdata3():
     try:
-        testdata.create()
-
         resp = DBManager.message_from_messagedb(testdata.testmsg3).to_json_obj()
 
         return rf.format(resp)
@@ -117,8 +111,6 @@ def get_message_by_id_testdata3():
 @app.route("/api/message/test4")
 def get_message_by_id_testdata4():
     try:
-        testdata.create()
-
         resp = DBManager.message_from_messagedb(testdata.testmsg4).to_json_obj()
 
         return rf.format(resp)
