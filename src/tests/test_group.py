@@ -4,11 +4,6 @@ import requests
 from custom_logger import CustomLogger
 logger = CustomLogger().setup()
 
-group_data = {
-    "groupname": "Test Group",
-    "description": "A test group for pytest"
-}
-
 def test_group_fail_missingkeys(server, testuser):
     group_data = {
         "description": "A test group for pytest",
@@ -45,9 +40,13 @@ def test_group_fail_invalidid(server):
         assert resp.json()["error"], resp.json()["data"]
         assert resp.json()["data"] == f"User with user_id {user_id} not found"
 
-@pytest.mark.order(1)
-def test_group_post(server, testuser):
-    global group_data
+def test_group_post_get(server, testuser):
+    group_data = {
+        "groupname": "Test Group",
+        "description": "A test group for pytest"
+    }
+
+    # --------------- POST ---------------
     group_data["user_id"] = testuser["user_id"]
     post_payload = {
         "data": group_data
@@ -57,8 +56,7 @@ def test_group_post(server, testuser):
     assert isinstance(resp.json()["data"]["group_id"], int)
     group_data["group_id"] = resp.json()["data"]["group_id"]
 
-@pytest.mark.order(2)
-def test_group_get(server):
+    # --------------- GET ---------------
     resp = requests.get(f"{server}/api/group/{group_data['group_id']}", timeout=5)
     assert not resp.json()["error"], resp.json()["data"]
     group = resp.json()["data"]

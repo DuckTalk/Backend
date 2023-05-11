@@ -4,13 +4,6 @@ import requests
 from custom_logger import CustomLogger
 logger = CustomLogger().setup()
 
-user_data = {
-    "username": "Test User",
-    "email": "testuser2@mail.com",
-    "pw_hash": "abcde",
-    "salt": "some_salt"
-}
-
 def test_user_fail_missingkeys(server):
     user_data = {
         "email": "failuser@mail.com",
@@ -48,10 +41,15 @@ def test_user_fail_missingkeys(server):
     assert resp.json()["error"], resp.json()["data"]
     assert resp.json()["data"] == "Missing key 'salt'"
 
-@pytest.mark.order(1)
-def test_user_post(server):
-    global user_data
+def test_user_post_get_delete(server):
+    user_data = {
+        "username": "Test User",
+        "email": "testuser2@mail.com",
+        "pw_hash": "abcde",
+        "salt": "some_salt"
+    }
 
+    # --------------- POST ---------------
     post_payload = {
         "data": user_data
     }
@@ -60,8 +58,7 @@ def test_user_post(server):
     assert isinstance(resp.json()["data"]["user_id"], int)
     user_data["user_id"] = resp.json()["data"]["user_id"]
 
-@pytest.mark.order(2)
-def test_user_get(server):
+    # --------------- GET ---------------
     resp = requests.get(f"{server}/api/user/{user_data['user_id']}", timeout=5)
     assert not resp.json()["error"], resp.json()["data"]
     user = resp.json()["data"]
@@ -69,8 +66,7 @@ def test_user_get(server):
     assert user["username"] == user_data["username"]
     assert user["publickey"] != ""
 
-@pytest.mark.order(3)
-def test_user_delete(server):
+    # --------------- DELETE ---------------
     resp = requests.delete(f"{server}/api/user/{user_data['user_id']}", timeout=5)
     assert not resp.json()["error"], resp.json()["data"]
     assert resp.json()["data"] == {}
