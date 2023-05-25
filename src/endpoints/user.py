@@ -55,7 +55,7 @@ def post_user(data: dict):
         if not key in data.keys():
             return f"Missing key '{key}'"
 
-    DBManager.get_inst().add_user(data["username"], data["email"], "some_key", data["pw_hash"], data["salt"])
+    DBManager.get_inst().add_user(username=data["username"], email=data["email"], publickey="some_key", hashed_pw=data["pw_hash"], salt=data["salt"])
     return {"user_id": DBManager.get_inst().get_userdb_from_email(data["email"]).user_id}
 
 def delete_user(user_id: int):
