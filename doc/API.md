@@ -176,6 +176,18 @@ Returns:
 - "data": (A dictionary containing the resulting data, or a string containing the error message)
     - [user](#user)
 
+Request a user by email
+
+Client:
+
+GET /api/user/<email>
+
+Returns:
+
+- "error": True | False (boolean value whether the request raised an error)
+- "data": (A dictionary containing the resulting data, or a string containing the error message)
+    - [user](#user)
+
 #### POST
 
 Create a new user

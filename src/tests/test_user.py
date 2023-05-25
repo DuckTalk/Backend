@@ -74,3 +74,11 @@ def test_user_post_get_delete(server):
     resp = requests.get(f"{server}/api/user/{user_data['user_id']}", timeout=5)
     assert resp.json()["error"], resp.json()["data"]
     assert isinstance(resp.json()["data"], str)
+
+def test_user_get_by_email(server, testuser):
+    resp = requests.get(f"{server}/api/user/{testuser['email']}", timeout=5)
+    assert not resp.json()["error"], resp.json()["data"]
+    user = resp.json()["data"]
+    assert user["user_id"] == testuser["user_id"]
+    assert user["username"] == testuser["username"]
+    assert user["publickey"] != ""
