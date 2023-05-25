@@ -28,6 +28,8 @@ def create():
     DBManager.get_inst().session.add(testuser2)
     testuser3 = Userdb(username="The test user 3", email="thetestuser3@mail.com", publickey="some_key", salt="testusersalt", hashed_pw="abcde", token=f"usertesttoken3")
     DBManager.get_inst().session.add(testuser3)
+    testuser4 = Userdb(username="The test user 4", email="thetestuser4@mail.com", publickey="some_key", salt="testusersalt", hashed_pw="abcde", token=f"usertesttoken4")
+    DBManager.get_inst().session.add(testuser4)
 
     testgroup = Groupdb(is_privatechat=False, groupname="The test group", description="A group for testing")
     DBManager.get_inst().session.add(testgroup)
@@ -38,6 +40,8 @@ def create():
     DBManager.get_inst().session.add(testgroupuser2)
     testgroupuser3 = GroupUserdb(isadmin=True)
     DBManager.get_inst().session.add(testgroupuser3)
+    testgroupuser4 = GroupUserdb(isadmin=True)
+    DBManager.get_inst().session.add(testgroupuser4)
 
     testmsg1 = Messagedb(content="This is the first test message!")
     DBManager.get_inst().session.add(testmsg1)
@@ -58,6 +62,9 @@ def create():
 
     testuser3.groupusers.append(testgroupuser3)
     testgroup.groupusers.append(testgroupuser3)
+
+    testuser4.groupusers.append(testgroupuser4)
+    testgroup.groupusers.append(testgroupuser4)
 
     testgroupuser3.messages.append(testmsg1)
     testgroup.groupmessages.append(testmsg1)
