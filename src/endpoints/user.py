@@ -32,6 +32,12 @@ def get_user_by_id(user_id: int):
 
     return rf.format(resp)
 
+@app.route("/api/user/<string:email>", methods=['GET'])
+def get_user_by_email(email: str):
+    user_id = DBManager.get_inst().get_userdb_from_email(email).user_id
+    resp = get_user(user_id)
+    return rf.format(resp)
+
 def get_user(user_id: int):
     try:
         saved_user = DBManager.get_inst().get_userdb_from_id(user_id)
