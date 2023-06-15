@@ -4,6 +4,7 @@ import json
 import os
 
 from flask import Flask
+from flask_cors import CORS
 
 from tests import testdata
 from database.db_manager import DBManager
@@ -65,6 +66,10 @@ def setup(args: dict):
 
     app = Flask(__name__)
     app.app_context().push()
+
+    # CORS
+    CORS(app)
+    app.config['CORS_HEADERS'] = 'Content-Type'
 
     logger.info("Loading endpoints")
     from endpoints import salt, token, message, user, group, home
