@@ -34,8 +34,11 @@ def get_user_by_id(user_id: int):
 
 @app.route("/api/user/<string:email>", methods=['GET'])
 def get_user_by_email(email: str):
-    user_id = DBManager.get_inst().get_userdb_from_email(email).user_id
-    resp = get_user(user_id)
+    user = DBManager.get_inst().get_userdb_from_email(email)
+    if user is None:
+        resp = f"User with email '{email}' not found"
+    else:
+        resp = get_user(user.user_id)
     return rf.format(resp)
 
 def get_user(user_id: int):
