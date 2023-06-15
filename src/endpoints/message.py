@@ -40,6 +40,8 @@ def post_message(data: dict):
     
     if not "type" in data["receiver"].keys():
         return "Missing key 'type'"
+    if data["receiver"]["type"] not in ["user", "group"]:
+        return f"Invalid value {data['receiver']['type']} for key 'type'"
 
     if data["receiver"]["type"] == "group":
         if not "group_id" in data["receiver"].keys():
@@ -67,7 +69,7 @@ def _post_pm(data: dict):
     receiver_group = None
     for groupuser in stored_receiver.groupusers:
         group: Groupdb = DBManager.get_inst().get_groupdb_from_id(groupuser.group_id)
-        if group.is_privatechat and (stored_sender in group.groupusers):
+        if group.is_privatechat and any([gu in group.groupusers for gu in stored_sender.groupusers]):
             receiver_group = group
 
     if receiver_group is None:

@@ -1,4 +1,3 @@
-import pytest
 import requests
 
 from custom_logger import CustomLogger
